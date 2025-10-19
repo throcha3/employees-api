@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: convenia-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+    networks:
+      - convenia-network
+    depends_on:
+      - mysql
+
+  nginx:
+    image: nginx:alpine
+    container_name: convenia-nginx
+    restart: unless-stopped
+    ports:
+      - "1010:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - convenia-network
+    depends_on:
+      - app
+
+  mysql:
+    image: mysql:8.0
+    container_name: convenia-mysql
+    restart: unless-stopped
+    ports:
+      - "1011:3306"
+    environment:
+      MYSQL_DATABASE: convenia
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: convenia
+      MYSQL_PASSWORD: convenia123
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - convenia-network
+
+networks:
+  convenia-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
