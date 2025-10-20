@@ -58,4 +58,68 @@ class EmployeeControllerTest extends TestCase
         $response->assertUnprocessable();
         $response->assertInvalid(['name', 'email', 'cpf', 'city', 'state']);
     }
+
+    public function test_should_update_own_employee()
+    {
+        $user = User::factory()->create();
+        $employee = Employee::factory()->create(['manager_id' => $user->id]);
+        $this->authenticate($user);
+        $fakeEmail = $this->faker->unique()->safeEmail();
+        $this->patchJson('/api/employees/'.$employee->id, ['email' => $fakeEmail])->assertOk();
+        $this->assertDatabaseHas('employees', ['id' => $employee->id, 'email' => $fakeEmail]);
+    }
+
+    public function test_should_not_update_employee_of_another_manager()
+    {
+        $user = User::factory()->create();
+        $this->authenticate($user);
+        $employee = Employee::factory()->create();
+        $this->patchJson('/api/employees/'.$employee->id, ['name' => $this->faker()->name])->assertNotFound();
+    }
+
+    public function test_should_not_update_when_invalid_input()
+    {
+        $user = User::factory()->create();
+        $employee = Employee::factory()->create(['manager_id' => $user->id]);
+        $this->authenticate($user);
+        $this->patchJson('/api/employees/'.$employee->id, ['email' => 'bad'])->assertUnprocessable();
+    }
+
+    public function test_should_not_update_or_create_duplicated_email()
+    {
+        $user = User::factory()->create();
+        $this->authenticate($user);
+
+        $emailA = $this->faker->unique()->safeEmail();
+        $emailB = $this->faker->unique()->safeEmail();
+
+        $a = Employee::factory()->create(['manager_id' => $user->id, 'email' => $emailA]);
+        $b = Employee::factory()->create(['manager_id' => $user->id, 'email' => $emailB]);
+
+        $this->postJson('/api/employees', [
+            'name' => $this->faker->name,
+            'email' => $emailA,
+        ])->assertUnprocessable();
+
+        $this->patchJson('/api/employees/'.$b->id, [
+            'email' => $emailA
+        ])->assertUnprocessable();
+    }
+
+    public function test_should_update_when_same_email_and_different_name()
+    {
+        $user = User::factory()->create();
+        $this->authenticate($user);
+
+        $emailA = $this->faker->unique()->safeEmail();
+        $a = Employee::factory()->create(['manager_id' => $user->id, 'email' => $emailA]);
+        $differentName = $this->faker->name;
+
+        $this->patchJson('/api/employees/'.$a->id, [
+            'email' => $emailA,
+            'name' => $differentName
+        ])->assertOk();
+
+        $this->assertDatabaseHas('employees', ['id' => $a->id, 'name' => $differentName]);
+    }
 }

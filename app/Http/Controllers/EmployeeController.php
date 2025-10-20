@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeeCreateRequest;
+use App\Http\Requests\EmployeeUpdateRequest;
 use App\Http\Resources\EmployeeIndexResource;
 use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
@@ -28,5 +29,17 @@ class EmployeeController extends Controller
         $employee = Employee::create($data);
 
         return response()->json($employee, ResponseAlias::HTTP_CREATED);
+    }
+
+    public function update(EmployeeUpdateRequest $request, Employee $employee)
+    {
+        if ($employee->manager_id !== $request->user()->id) {
+            return response()->json(null, ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        $data = $request->validated();
+        $employee->update($data);
+
+        return response()->json($employee->only(array_keys($data)), ResponseAlias::HTTP_OK);
     }
 }
