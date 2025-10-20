@@ -40,6 +40,3 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employee.index');
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employee.store');
 });
-
-
-

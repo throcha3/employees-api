@@ -59,6 +59,3 @@ class EmployeeControllerTest extends TestCase
         $response->assertInvalid(['name', 'email', 'cpf', 'city', 'state']);
     }
 }
-
-
-
