@@ -46,10 +46,24 @@ services:
     networks:
       - convenia-network
 
+  redis:
+    image: redis:7-alpine
+    container_name: convenia-redis
+    restart: unless-stopped
+    ports:
+      - "1012:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - convenia-network
+    command: redis-server --appendonly yes
+
 networks:
   convenia-network:
     driver: bridge
 
 volumes:
   mysql_data:
+    driver: local
+  redis_data:
     driver: local
