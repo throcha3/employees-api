@@ -37,7 +37,8 @@ Route::middleware('auth:api')->group(function () {
         return response()->json(['message' => 'Logged out']);
     });
 
-    Route::get('/employees', [EmployeeController::class, 'index']);
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employee.index');
+    Route::post('/employees', [EmployeeController::class, 'store'])->name('employee.store');
 });
 
 
