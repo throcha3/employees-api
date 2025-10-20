@@ -29,6 +29,7 @@ services:
       - convenia-network
     depends_on:
       - app
+      - redis
 
   mysql:
     image: mysql:8.0
@@ -45,6 +46,8 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - convenia-network
+    depends_on:
+      - redis
 
   redis:
     image: redis:7-alpine
@@ -57,6 +60,22 @@ services:
     networks:
       - convenia-network
     command: redis-server --appendonly yes
+
+  horizon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: convenia-horizon
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - convenia-network
+    command: bash -lc "php artisan horizon"
 
 networks:
   convenia-network:
