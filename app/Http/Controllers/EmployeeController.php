@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EmployeeCreateRequest;
 use App\Http\Requests\EmployeeUpdateRequest;
 use App\Http\Resources\EmployeeIndexResource;
+use App\Http\Resources\EmployeeShowResource;
 use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,5 +42,23 @@ class EmployeeController extends Controller
         $employee->update($data);
 
         return response()->json($employee->only(array_keys($data)), ResponseAlias::HTTP_OK);
+    }
+
+    public function show(Request $request, Employee $employee)
+    {
+        if ($employee->manager_id !== $request->user()->id) {
+            return response()->json(null, ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        return new EmployeeShowResource($employee);
+    }
+
+    public function destroy(Request $request, Employee $employee)
+    {
+        if ($employee->manager_id !== $request->user()->id) {
+            return response()->json(null, ResponseAlias::HTTP_NOT_FOUND);
+        }
+        $employee->delete();
+        return response()->noContent();
     }
 }

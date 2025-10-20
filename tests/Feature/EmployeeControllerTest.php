@@ -122,4 +122,61 @@ class EmployeeControllerTest extends TestCase
 
         $this->assertDatabaseHas('employees', ['id' => $a->id, 'name' => $differentName]);
     }
+
+    public function test_should_show_own_employee()
+    {
+        $owner = User::factory()->create();
+        $owned = Employee::factory()->create(['manager_id' => $owner->id]);
+        $this->authenticate($owner);
+        $result = $this->getJson(route('employee.show', ['employee' => $owned->id]))
+            ->assertOk();
+
+        $result->assertJsonStructure([
+            'data' => [
+                'manager_id',
+                'manager_name',
+                'name',
+                'email',
+                'cpf',
+                'city',
+                'state',
+                'created_at',
+                'updated_at',
+            ]
+        ]);
+
+    }
+
+    public function test_should_not_show_other_manager_employee()
+    {
+        $owner = User::factory()->create();
+        $otherManagerEmployee = Employee::factory()->create();
+        $this->authenticate($owner);
+        $this->getJson(
+            route('employee.show', ['employee' => $otherManagerEmployee->id])
+        )->assertNotFound();
+    }
+
+    public function test_should_destroy_own_employee()
+    {
+        $user = User::factory()->create();
+        $employee = Employee::factory()->create(['manager_id' => $user->id]);
+        $this->authenticate($user);
+        $this->deleteJson(
+            route('employee.destroy', ['employee' => $employee->id]),
+            []
+        )->assertNoContent();
+        $this->assertDatabaseMissing('employees', ['id' => $employee->id]);
+    }
+
+    public function test_should_not_destroy_employee_owned_by_other_manager()
+    {
+        $user = User::factory()->create();
+        $otherManagerEmployee = Employee::factory()->create();
+        $this->authenticate($user);
+        $this->deleteJson(
+            route('employee.destroy', ['employee' => $otherManagerEmployee->id]),
+            []
+        )->assertNotFound();
+    }
 }
