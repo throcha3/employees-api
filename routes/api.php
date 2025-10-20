@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,9 @@ Route::middleware('auth:api')->group(function () {
         $request->user()->token()?->revoke();
         return response()->json(['message' => 'Logged out']);
     });
+
+    Route::get('/employees', [EmployeeController::class, 'index']);
 });
+
 
 
