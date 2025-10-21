@@ -50,14 +50,20 @@ docker-compose exec app php artisan db:seed
 ## Comandos úteis
 
 ```bash
+#rodar os testes
+docker-compose exec app ./vendor/bin/phpunit
+
+#formatar código
+docker-compose exec app ./vendor/bin/php-cs-fixer fix .
+
+#gerar docs
+docker-compose exec app php artisan scribe:generate
+
 # Ver logs dos containers
 docker-compose logs -f
 
 # Executar comandos Artisan
 docker-compose exec app php artisan [comando]
-
-# Acessar o container da aplicação
-docker-compose exec app bash
 
 # Parar os serviços
 docker-compose down
