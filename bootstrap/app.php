@@ -15,5 +15,18 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Throwable $e, \Illuminate\Http\Request $request) {
+
+            // Don't show error stack when in production
+            if (app()->isProduction()) {
+                $statusCode = ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) ? $e->getStatusCode() : 500;
+
+                return response()->json([
+                    'message' => 'Ocorreu um erro inesperado no servidor.',
+                    'code' => $statusCode
+                ], $statusCode);
+            }
+
+            return false;
+        });
     })->create();
