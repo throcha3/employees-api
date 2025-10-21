@@ -114,7 +114,7 @@ docker-compose down -v
 
 ## Pontos de melhoria
 - Rate limiter: definir regras de quantidade de acessos nas rotas
-- Gestão de identidade para permitir multiplos tipos de usuários e permissões, e gerenciar o que podem acessar. (keycloak seria uma boa pra isso)
+- Gestão de identidade para permitir multiplos tipos de usuários e permissões, e gerenciar o que podem acessar. Permitiria ter um usuário "admin" q pode ver todos os colaboradores. (keycloak seria uma boa pra isso)
 - Mais logs para melhorar a manutenção
 - CI/CD
 - Criação de método para padronização de retornos da api
