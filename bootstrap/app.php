@@ -21,8 +21,15 @@ return Application::configure(basePath: dirname(__DIR__))
             if (app()->isProduction()) {
                 $statusCode = ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) ? $e->getStatusCode() : 500;
 
+                Log::error("Unexpected production error", [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+
                 return response()->json([
-                    'message' => 'Ocorreu um erro inesperado no servidor.',
+                    'message' => 'Unexpected internal error',
                     'code' => $statusCode
                 ], $statusCode);
             }
