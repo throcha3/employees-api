@@ -15,6 +15,10 @@ Este projeto inclui um ambiente Docker completo para desenvolvimento/testes em a
 
 ## Como usar
 
+Obs¹: Parte-se do pressuposto  que o desenvolvedor já tenha o Docker instalado e configurado na máquina
+
+Obs²: Dependendo da versão, pode ser necessário substituir o "docker-compose" por "docker compose" (remover o hífen)
+
 ### 1. Configurar o ambiente
 
 ```bash
@@ -27,9 +31,17 @@ cp env.docker.example .env
 ```bash
 # Iniciar os containers (será construído se for a primeira vez)
 docker-compose up -d
+
+# instalar dependencias
+docker compose exec app composer install
+
+#permissão nas pastas
+docker compose exec app chown -R www-data:www-data storage bootstrap/cache
+
+
 ```
 
-### 3. Configurar o banco de dados
+### 3. Inicializar o banco de dados
 
 ```bash
 # Executar as migrações
@@ -39,7 +51,17 @@ docker-compose exec app php artisan migrate
 docker-compose exec app php artisan db:seed
 ```
 
-### 4. Acessar a aplicação
+### 4. Configurar Passport
+
+```bash
+# Gerar chaves
+docker-compose exec app php artisan passport:keys
+
+# Gerar Client
+docker-compose exec app php artisan passport:client --personal
+```
+
+### 5. Acessar a aplicação
 
 -   **Aplicação**: http://localhost:1010
 -   **Banco de Dados**: localhost:1011
@@ -56,11 +78,6 @@ docker-compose exec app php artisan db:seed
     "password": "password",
     "device_name": "cli"
 }
-```
-
-Se der erro em relação ao client qdo fizer o login, executar o comando para gerar o client e chaves
-```bash
-docker-compose exec app php artisan passport:client --personal
 ```
 
 ## Comandos úteis
