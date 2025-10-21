@@ -112,6 +112,16 @@ docker-compose down
 docker-compose down -v
 ```
 
+## Pontos de melhoria
+- Rate limiter: definir regras de quantidade de acessos nas rotas
+- Gestão de identidade para permitir multiplos tipos de usuários e permissões, e gerenciar o que podem acessar. (keycloak seria uma boa pra isso)
+- Mais logs para melhorar a manutenção
+- CI/CD
+- Criação de método para padronização de retornos da api
+- Mudar a forma com que o csv está sendo lido. Do jeito q está é legal pq usa um ponteiro para não carregar o arquivo todo na memória, mas por conta do Batch, acumula os dados num array, oq não é bom pra memória. Uma solução melhor seria dividir os arquivos em vários outros arquivos e salvar num storage temporário, então dentro dos jobs, seria lido esses arquivos, inserido no banco e então deletado.
+- Relatório de importação do arquivo: após finalizar o processamento, gerar um relatório da importação mostrando os erros e enviar por email ou outra ferramenta.
+- 
+
 ## Estrutura de Arquivos Docker
 
 ```
