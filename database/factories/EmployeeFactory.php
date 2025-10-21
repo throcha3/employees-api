@@ -18,7 +18,7 @@ class EmployeeFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'cpf' => $this->faker->unique()->numerify('###########'),
             'city' => $this->faker->city(),
-            'state' => $this->faker->randomElement(['SP', 'RJ', 'PR', 'CE', 'BA']),
+            'state' => $this->faker->randomElement(['Sao Paulo', 'Rio de Janeiro', 'Parana']),
         ];
     }
 }

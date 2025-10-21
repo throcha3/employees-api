@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeeCreateRequest;
 use App\Http\Requests\EmployeeUpdateRequest;
+use App\Http\Requests\UploadCsvRequest;
+use App\Models\User as AppUser;
+use App\Services\EmployeeService;
 use App\Http\Resources\EmployeeIndexResource;
 use App\Http\Resources\EmployeeShowResource;
 use App\Models\Employee;
@@ -60,5 +63,15 @@ class EmployeeController extends Controller
         }
         $employee->delete();
         return response()->noContent();
+    }
+
+    public function uploadCsv(UploadCsvRequest $request, EmployeeService $service): JsonResponse
+    {
+        $file = $request->file('file');
+        $manager = auth()->user();
+
+        $service->createEmployeesByCsv($file, $manager);
+
+        return response()->json(['message' => 'Batch dispatched'], ResponseAlias::HTTP_ACCEPTED);
     }
 }

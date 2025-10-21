@@ -14,7 +14,7 @@ class EmployeeCreateRequest extends FormRequest
             'email' => ['required', 'email', Rule::unique('employees', 'email')],
             'cpf' => ['required', 'string', Rule::unique('employees', 'cpf')],
             'city' => ['required', 'string', 'max:150'],
-            'state' => ['required', 'string', 'max:2'],
+            'state' => ['required', 'string', 'max:32'],
         ];
     }
 }
