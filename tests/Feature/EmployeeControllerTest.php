@@ -18,6 +18,20 @@ class EmployeeControllerTest extends TestCase
         Passport::actingAs($user);
     }
 
+    public function test_user_should_be_authenticated_to_access_routes(): void
+    {
+        $employee = Employee::factory()->create();
+        $this->getJson(route('employee.index'))->assertStatus(401);
+        $this->postJson(route('employee.store'), [])->assertStatus(401);
+        $this->getJson(route('employee.show', ['employee' => $employee->id]))
+            ->assertStatus(401);
+        $this->deleteJson(route('employee.destroy', ['employee' => $employee->id]))
+            ->assertStatus(401);
+        $this->patchJson(route('employee.update', ['employee' => $employee->id]))
+            ->assertStatus(401);
+
+    }
+
     public function test_index_should_show_only_owned_records(): void
     {
         $owner = User::factory()->create();
@@ -42,8 +56,9 @@ class EmployeeControllerTest extends TestCase
             'email' => $this->faker->unique()->safeEmail(),
             'cpf' => $this->faker->unique()->numerify('###########'),
             'city' => $this->faker->city(),
-            'state' => $this->faker->randomElement([['Sao Paulo', 'Rio de Janeiro', 'Parana']]),
+            'state' => $this->faker->randomElement(['Sao Paulo', 'Rio de Janeiro', 'Parana']),
         ];
+
         $response = $this->postJson(route('employee.store'), $payload);
         $response->assertCreated();
         $this->assertDatabaseHas('employees', array_merge($payload, ['manager_id' => $user->id]));
