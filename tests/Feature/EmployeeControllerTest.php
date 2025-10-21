@@ -1,10 +1,15 @@
 <?php
 
 
+use App\Jobs\InsertEmployeesJob;
 use App\Models\Employee;
 use App\Models\User;
+use App\Services\EmployeeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -193,5 +198,29 @@ class EmployeeControllerTest extends TestCase
             route('employee.destroy', ['employee' => $otherManagerEmployee->id]),
             []
         )->assertNotFound();
+    }
+
+    public function test_should_process_csv_and_save_data_in_database()
+    {
+        $manager = User::factory()->make([
+            'email' => 'manager@example.com',
+        ]);
+        $this->authenticate($manager);
+
+        $csvContent =
+            "name,email,cpf,city,state\n" .
+            "John Doe,john@example.com,123.456.789-00,New York,NY\n" .
+            "Jane Smith,jane@example.com,123.456.789-01,Los Angeles,CA\n" .
+            "Mark Test,mark@example.com,123.456.789-02,Chicago,IL\n" .
+            "Alice Beta,alice@example.com,123.456.789-03,Houston,TX\n" .
+            "Bob Gamma,bob@example.com,123.456.789-04,Phoenix,AZ";
+
+        $file = UploadedFile::fake()->createWithContent('employees.csv', $csvContent);
+
+        $this->post(route('employee.uploadCsv'), [
+            'csv' => $file
+        ])->assertOk();
+
+        $this->assertDatabaseCount('employees', 5);
     }
 }
