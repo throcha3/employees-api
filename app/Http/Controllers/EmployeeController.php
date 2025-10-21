@@ -107,6 +107,6 @@ class EmployeeController extends Controller
 
         $service->createEmployeesByCsv($file, $manager);
 
-        return response()->json(['message' => 'Batch dispatched'], ResponseAlias::HTTP_ACCEPTED);
+        return response()->json(['message' => 'Batch dispatched'], ResponseAlias::HTTP_OK);
     }
 }
