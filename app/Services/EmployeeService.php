@@ -8,6 +8,7 @@ use App\Models\User as AppUser;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -71,5 +72,36 @@ class EmployeeService
         $batch->dispatch();
 
         \Log::info(self::LOG_KEY . 'finished');
+    }
+
+    /**
+     * Invalidate all employee-related cache for a specific user
+     *
+     * @param int $userId
+     * @return void
+     */
+    public function invalidateUserEmployeeCache(int $userId): void
+    {
+        $pattern = "employees_index_user_{$userId}_*";
+        $this->invalidateCacheByPattern($pattern);
+
+        $pattern = "employee_show_user_{$userId}_*";
+        $this->invalidateCacheByPattern($pattern);
+    }
+
+    public function invalidateCacheByPattern(string $pattern): void
+    {
+        if (config('cache.default') !== 'redis') {
+            return;
+        }
+
+        try {
+            $keys = Cache::store('redis')->getRedis()->keys($pattern);
+            if (!empty($keys)) {
+                Cache::store('redis')->getRedis()->del($keys);
+            }
+        } catch (\Exception $e) {
+            // Redis not available, skip cache invalidation
+        }
     }
 }

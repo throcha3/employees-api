@@ -24,6 +24,12 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class EmployeeController extends Controller
 {
+    private EmployeeService $employeeService;
+
+    public function __construct()
+    {
+        $this->employeeService = new EmployeeService();
+    }
     public function index(Request $request)
     {
         $userId = $request->user()->id;
@@ -46,7 +52,7 @@ class EmployeeController extends Controller
         $data['manager_id'] = $request->user()->id;
         $employee = Employee::create($data);
 
-        $this->invalidateUserEmployeeCache($request->user()->id);
+        $this->employeeService->invalidateUserEmployeeCache($request->user()->id);
 
         return response()->json($employee, ResponseAlias::HTTP_CREATED);
     }
@@ -60,7 +66,7 @@ class EmployeeController extends Controller
         $data = $request->validated();
         $employee->update($data);
 
-        $this->invalidateUserEmployeeCache($request->user()->id);
+        $this->employeeService->invalidateUserEmployeeCache($request->user()->id);
 
         return response()->json($employee->only(array_keys($data)), ResponseAlias::HTTP_OK);
     }
@@ -88,7 +94,7 @@ class EmployeeController extends Controller
         }
         $employee->delete();
 
-        $this->invalidateUserEmployeeCache($request->user()->id);
+        $this->employeeService->invalidateUserEmployeeCache($request->user()->id);
 
         return response()->noContent();
     }
@@ -100,40 +106,8 @@ class EmployeeController extends Controller
 
         $service->createEmployeesByCsv($file, $manager);
 
-        $this->invalidateUserEmployeeCache($manager->id);
+        $this->employeeService->invalidateUserEmployeeCache($manager->id);
 
         return response()->json(['message' => 'Batch dispatched'], ResponseAlias::HTTP_ACCEPTED);
     }
-
-    /**
-     * Invalidate all employee-related cache for a specific user
-     *
-     * @param int $userId
-     * @return void
-     */
-    private function invalidateUserEmployeeCache(int $userId): void
-    {
-        $pattern = "employees_index_user_{$userId}_*";
-        $this->invalidateCacheByPattern($pattern);
-
-        $pattern = "employee_show_user_{$userId}_*";
-        $this->invalidateCacheByPattern($pattern);
-    }
-
-    private function invalidateCacheByPattern(string $pattern): void
-    {
-        if (config('cache.default') !== 'redis') {
-            return;
-        }
-
-        try {
-            $keys = Cache::store('redis')->getRedis()->keys($pattern);
-            if (!empty($keys)) {
-                Cache::store('redis')->getRedis()->del($keys);
-            }
-        } catch (\Exception $e) {
-            // Redis not available, skip cache invalidation
-        }
-    }
-
 }
