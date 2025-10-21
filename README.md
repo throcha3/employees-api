@@ -59,6 +59,10 @@ docker-compose exec app php artisan passport:keys
 
 # Gerar Client
 docker-compose exec app php artisan passport:client --personal
+
+# Permissões das chaves
+docker-compose exec app chmod -R 600 storage/oauth-private.key storage/oauth-public.key
+
 ```
 
 ### 5. Acessar a aplicação
