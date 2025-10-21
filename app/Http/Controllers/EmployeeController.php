@@ -12,6 +12,7 @@ use App\Http\Resources\EmployeeShowResource;
 use App\Models\Employee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -101,12 +102,10 @@ class EmployeeController extends Controller
 
     public function uploadCsv(UploadCsvRequest $request, EmployeeService $service): JsonResponse
     {
-        $file = $request->file('file');
-        $manager = auth()->user();
+        $file = $request->file('csv');
+        $manager = Auth::user();
 
         $service->createEmployeesByCsv($file, $manager);
-
-        $this->employeeService->invalidateUserEmployeeCache($manager->id);
 
         return response()->json(['message' => 'Batch dispatched'], ResponseAlias::HTTP_ACCEPTED);
     }
