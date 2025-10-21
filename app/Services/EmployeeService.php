@@ -17,9 +17,9 @@ class EmployeeService
 {
     public const LOG_KEY = 'employee_service -> ';
 
-    public function __construct(private int $batchSize = 2)
+    public function __construct(private int $batchSize = 50)
     {
-        $this->batchSize = (int) env('IMPORT_CSV_BATCH_SIZE', 2);
+        $this->batchSize = (int) env('IMPORT_CSV_BATCH_SIZE', 50);
     }
 
     public function createEmployeesByCsv(UploadedFile $file, AppUser $manager): void
