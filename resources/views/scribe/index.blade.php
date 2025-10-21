@@ -854,7 +854,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:1010/api/employees/upload-csv" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "csv=@/tmp/phpuDMlLn" </code></pre></div>
+    --form "csv=@/tmp/php4sh4oi" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -959,7 +959,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be a file. Example: <code>/tmp/phpuDMlLn</code></p>
+<p>Must be a file. Example: <code>/tmp/php4sh4oi</code></p>
         </div>
         </form>
 
@@ -977,7 +977,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost:1010/api/employees/1" \
+    "http://localhost:1010/api/employees/311" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -991,7 +991,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:1010/api/employees/1"
+    "http://localhost:1010/api/employees/311"
 );
 
 const headers = {
@@ -1092,10 +1092,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="employee_id"                data-endpoint="PATCHapi-employees--employee_id-"
-               value="1"
+               value="311"
                data-component="url">
     <br>
-<p>The ID of the employee. Example: <code>1</code></p>
+<p>The ID of the employee. Example: <code>311</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -1158,14 +1158,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:1010/api/employees/1" \
+    --get "http://localhost:1010/api/employees/311" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:1010/api/employees/1"
+    "http://localhost:1010/api/employees/311"
 );
 
 const headers = {
@@ -1274,10 +1274,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="employee_id"                data-endpoint="GETapi-employees--employee_id-"
-               value="1"
+               value="311"
                data-component="url">
     <br>
-<p>The ID of the employee. Example: <code>1</code></p>
+<p>The ID of the employee. Example: <code>311</code></p>
             </div>
                     </form>
 
@@ -1295,14 +1295,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://localhost:1010/api/employees/1" \
+    "http://localhost:1010/api/employees/311" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:1010/api/employees/1"
+    "http://localhost:1010/api/employees/311"
 );
 
 const headers = {
@@ -1395,10 +1395,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="employee_id"                data-endpoint="DELETEapi-employees--employee_id-"
-               value="1"
+               value="311"
                data-component="url">
     <br>
-<p>The ID of the employee. Example: <code>1</code></p>
+<p>The ID of the employee. Example: <code>311</code></p>
             </div>
                     </form>
 
