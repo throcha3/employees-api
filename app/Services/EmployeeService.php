@@ -61,6 +61,9 @@ class EmployeeService
             $rowIndex++;
         }
         if (count($batchData) > 0) {
+            //With big csvs, this probably will exhaust memory
+            //Another solution would be to slice the csv in multiple files and send only the filename instead of batchData
+            //So InsertEmployeesJob should load the file and then insert in the database.
             $batch->add(new InsertEmployeesJob($batchData, $manager));
         }
         fclose($stream);
