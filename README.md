@@ -46,7 +46,8 @@ docker-compose exec app php artisan db:seed
     -   Usuário: `convenia`
     -   Senha: `convenia123`
     -   Database: `convenia`
--   ** Documentação**: http://localhost:1010/docs
+-   **Documentação**: http://localhost:1010/docs
+-   **Postman collection da documentação**: http://localhost:1010/docs.postman
 
 ## Comandos úteis
 

@@ -15,6 +15,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
+/**
+ * @group Employees
+ * @authenticated
+ *
+ * APIs for managing employees
+ */
+
 class EmployeeController extends Controller
 {
     public function index(Request $request)
@@ -22,7 +29,7 @@ class EmployeeController extends Controller
         $userId = $request->user()->id;
         $page = $request->get('page', 1);
         $cacheKey = "employees_index_user_{$userId}_page_{$page}";
-        
+
         $result = Cache::remember($cacheKey, 300, function () use ($request) {
             return Employee::query()
                 ->with(['manager'])
@@ -66,7 +73,7 @@ class EmployeeController extends Controller
 
         $userId = $request->user()->id;
         $cacheKey = "employee_show_user_{$userId}_employee_{$employee->id}";
-        
+
         $result = Cache::remember($cacheKey, 300, function () use ($employee) {
             return new EmployeeShowResource($employee);
         });
@@ -118,7 +125,7 @@ class EmployeeController extends Controller
         if (config('cache.default') !== 'redis') {
             return;
         }
-        
+
         try {
             $keys = Cache::store('redis')->getRedis()->keys($pattern);
             if (!empty($keys)) {

@@ -66,37 +66,44 @@
                     <a href="#authenticating-requests">Authenticating requests</a>
                 </li>
                             </ul>
-                    <ul id="tocify-header-endpoints" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="endpoints">
-                    <a href="#endpoints">Endpoints</a>
+                    <ul id="tocify-header-authentication" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="authentication">
+                    <a href="#authentication">Authentication</a>
                 </li>
-                                    <ul id="tocify-subheader-endpoints" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-login">
-                                <a href="#endpoints-POSTapi-login">POST api/login</a>
+                                    <ul id="tocify-subheader-authentication" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="authentication-POSTapi-login">
+                                <a href="#authentication-POSTapi-login">Handle user login</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-me">
-                                <a href="#endpoints-GETapi-me">GET api/me</a>
+                                                                                <li class="tocify-item level-2" data-unique="authentication-GETapi-me">
+                                <a href="#authentication-GETapi-me">Get authenticated user information</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-logout">
-                                <a href="#endpoints-POSTapi-logout">POST api/logout</a>
+                                                                                <li class="tocify-item level-2" data-unique="authentication-POSTapi-logout">
+                                <a href="#authentication-POSTapi-logout">Handle user logout</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-employees">
-                                <a href="#endpoints-GETapi-employees">GET api/employees</a>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-employees" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="employees">
+                    <a href="#employees">Employees</a>
+                </li>
+                                    <ul id="tocify-subheader-employees" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="employees-GETapi-employees">
+                                <a href="#employees-GETapi-employees">GET api/employees</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-employees">
-                                <a href="#endpoints-POSTapi-employees">POST api/employees</a>
+                                                                                <li class="tocify-item level-2" data-unique="employees-POSTapi-employees">
+                                <a href="#employees-POSTapi-employees">POST api/employees</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-employees-upload-csv">
-                                <a href="#endpoints-POSTapi-employees-upload-csv">POST api/employees/upload-csv</a>
+                                                                                <li class="tocify-item level-2" data-unique="employees-POSTapi-employees-upload-csv">
+                                <a href="#employees-POSTapi-employees-upload-csv">POST api/employees/upload-csv</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PATCHapi-employees--employee_id-">
-                                <a href="#endpoints-PATCHapi-employees--employee_id-">PATCH api/employees/{employee_id}</a>
+                                                                                <li class="tocify-item level-2" data-unique="employees-PATCHapi-employees--employee_id-">
+                                <a href="#employees-PATCHapi-employees--employee_id-">PATCH api/employees/{employee_id}</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-employees--employee_id-">
-                                <a href="#endpoints-GETapi-employees--employee_id-">GET api/employees/{employee_id}</a>
+                                                                                <li class="tocify-item level-2" data-unique="employees-GETapi-employees--employee_id-">
+                                <a href="#employees-GETapi-employees--employee_id-">GET api/employees/{employee_id}</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-employees--employee_id-">
-                                <a href="#endpoints-DELETEapi-employees--employee_id-">DELETE api/employees/{employee_id}</a>
+                                                                                <li class="tocify-item level-2" data-unique="employees-DELETEapi-employees--employee_id-">
+                                <a href="#employees-DELETEapi-employees--employee_id-">DELETE api/employees/{employee_id}</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -128,11 +135,11 @@ You can switch the language used with the tabs at the top right (or from the nav
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is not authenticated.</p>
 
-        <h1 id="endpoints">Endpoints</h1>
+        <h1 id="authentication">Authentication</h1>
 
-    
+    <p>APIs for auth</p>
 
-                                <h2 id="endpoints-POSTapi-login">POST api/login</h2>
+                                <h2 id="authentication-POSTapi-login">Handle user login</h2>
 
 <p>
 </p>
@@ -147,7 +154,13 @@ You can switch the language used with the tabs at the top right (or from the nav
     <pre><code class="language-bash">curl --request POST \
     "http://localhost:1010/api/login" \
     --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
+    --header "Accept: application/json" \
+    --data "{
+    \"email\": \"qkunze@example.com\",
+    \"password\": \"consequatur\",
+    \"device_name\": \"consequatur\"
+}"
+</code></pre></div>
 
 
 <div class="javascript-example">
@@ -160,9 +173,16 @@ const headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "email": "qkunze@example.com",
+    "password": "consequatur",
+    "device_name": "consequatur"
+};
+
 fetch(url, {
     method: "POST",
     headers,
+    body: JSON.stringify(body),
 }).then(response =&gt; response.json());</code></pre></div>
 
 </span>
@@ -238,9 +258,43 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                        </form>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-login"
+               value="qkunze@example.com"
+               data-component="body">
+    <br>
+<p>Must be a valid email address. Example: <code>qkunze@example.com</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="password"                data-endpoint="POSTapi-login"
+               value="consequatur"
+               data-component="body">
+    <br>
+<p>Example: <code>consequatur</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>device_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+                <input type="text" style="display: none"
+                              name="device_name"                data-endpoint="POSTapi-login"
+               value="consequatur"
+               data-component="body">
+    <br>
+<p>Example: <code>consequatur</code></p>
+        </div>
+        </form>
 
-                    <h2 id="endpoints-GETapi-me">GET api/me</h2>
+                    <h2 id="authentication-GETapi-me">Get authenticated user information</h2>
 
 <p>
 </p>
@@ -364,7 +418,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-logout">POST api/logout</h2>
+                    <h2 id="authentication-POSTapi-logout">Handle user logout</h2>
 
 <p>
 </p>
@@ -472,9 +526,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-GETapi-employees">GET api/employees</h2>
+                <h1 id="employees">Employees</h1>
+
+    
+
+                                <h2 id="employees-GETapi-employees">GET api/employees</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -542,7 +601,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-GETapi-employees" data-method="GET"
       data-path="api/employees"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
@@ -596,9 +655,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-POSTapi-employees">POST api/employees</h2>
+                    <h2 id="employees-POSTapi-employees">POST api/employees</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -667,7 +727,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-POSTapi-employees" data-method="POST"
       data-path="api/employees"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
@@ -777,9 +837,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-employees-upload-csv">POST api/employees/upload-csv</h2>
+                    <h2 id="employees-POSTapi-employees-upload-csv">POST api/employees/upload-csv</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -793,7 +854,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:1010/api/employees/upload-csv" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "csv=@/tmp/phpOPOa3w" </code></pre></div>
+    --form "csv=@/tmp/phpuDMlLn" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -836,7 +897,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-POSTapi-employees-upload-csv" data-method="POST"
       data-path="api/employees/upload-csv"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="1"
       data-isarraybody="0"
       autocomplete="off"
@@ -898,13 +959,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be a file. Example: <code>/tmp/phpOPOa3w</code></p>
+<p>Must be a file. Example: <code>/tmp/phpuDMlLn</code></p>
         </div>
         </form>
 
-                    <h2 id="endpoints-PATCHapi-employees--employee_id-">PATCH api/employees/{employee_id}</h2>
+                    <h2 id="employees-PATCHapi-employees--employee_id-">PATCH api/employees/{employee_id}</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -971,7 +1033,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-PATCHapi-employees--employee_id-" data-method="PATCH"
       data-path="api/employees/{employee_id}"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
@@ -1082,9 +1144,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-GETapi-employees--employee_id-">GET api/employees/{employee_id}</h2>
+                    <h2 id="employees-GETapi-employees--employee_id-">GET api/employees/{employee_id}</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -1152,7 +1215,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-GETapi-employees--employee_id-" data-method="GET"
       data-path="api/employees/{employee_id}"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
@@ -1218,9 +1281,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
-                    <h2 id="endpoints-DELETEapi-employees--employee_id-">DELETE api/employees/{employee_id}</h2>
+                    <h2 id="employees-DELETEapi-employees--employee_id-">DELETE api/employees/{employee_id}</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -1272,7 +1336,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-DELETEapi-employees--employee_id-" data-method="DELETE"
       data-path="api/employees/{employee_id}"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
