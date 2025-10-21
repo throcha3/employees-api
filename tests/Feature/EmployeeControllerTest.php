@@ -202,7 +202,7 @@ class EmployeeControllerTest extends TestCase
 
     public function test_should_process_csv_and_save_data_in_database()
     {
-        $manager = User::factory()->make([
+        $manager = User::factory()->create([
             'email' => 'manager@example.com',
         ]);
         $this->authenticate($manager);
@@ -221,6 +221,6 @@ class EmployeeControllerTest extends TestCase
             'csv' => $file
         ])->assertOk();
 
-        $this->assertDatabaseCount('employees', 5);
+        $this->assertDatabaseCount(Employee::class, 5);
     }
 }
